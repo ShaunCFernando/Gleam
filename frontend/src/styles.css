@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 33% 98%;
+    --foreground: 90 11% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 90 11% 14%;
+
+    --primary: 138 15% 33%;
+    --primary-foreground: 45 33% 98%;
+
+    --secondary: 120 15% 91%;
+    --secondary-foreground: 138 15% 33%;
+
+    --muted: 45 25% 94%;
+    --muted-foreground: 90 7% 42%;
+
+    --accent: 120 15% 91%;
+    --accent-foreground: 138 15% 33%;
+
+    --destructive: 358 45% 47%;
+    --destructive-foreground: 45 33% 98%;
+
+    --border: 49 16% 87%;
+    --input: 49 16% 87%;
+    --ring: 138 15% 33%;
+
+    --radius: 0.9rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer utilities {
+  .font-serif-display {
+    font-family: "Gowun Batang", Georgia, "Times New Roman", serif;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
