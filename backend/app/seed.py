@@ -10,6 +10,9 @@ from .database import Base, SessionLocal, engine
 
 
 def run():
+    concern_ids = {c["id"] for c in seed_data.CONCERNS}
+    seed_data.validate_products(seed_data.PRODUCTS, concern_ids)
+
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:

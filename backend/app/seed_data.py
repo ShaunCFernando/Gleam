@@ -4,6 +4,34 @@ exists to populate the database once (see seed.py); the app itself always reads
 from Postgres via app.models.
 """
 
+from .quiz_config import QUIZ_STEPS
+from .scoring import STEP_META
+
+# "all" is a special-cased wildcard in scoring.score_product, not a literal quiz
+# answer — it's valid on a product's skin_types even though it's never a QUIZ_STEPS
+# option value.
+VALID_SKIN_TYPES = {
+    option["value"]
+    for step in QUIZ_STEPS
+    if step["id"] == "skin_type"
+    for option in step["options"]
+} | {"all"}
+
+# Categories scoring.py actually knows how to slot into a routine (ROUTINES/STEP_META).
+VALID_CATEGORIES = set(STEP_META.keys())
+
+REQUIRED_PRODUCT_FIELDS = (
+    "id",
+    "brand",
+    "name",
+    "category",
+    "skin_types",
+    "concerns",
+    "sensitive_safe",
+    "actives",
+    "ingredient",
+)
+
 CONCERNS = [
     {"id": "acne", "label": "Breakouts & acne"},
     {"id": "dark-spots", "label": "Dark spots & uneven tone"},
@@ -143,3 +171,72 @@ PRODUCTS = [
     {"id": "bj-redbean", "brand": "Beauty of Joseon", "name": "Red Bean Refreshing Pore Mask", "category": "mask", "price": 17, "skin_types": ["oily", "combination"], "concerns": ["pores", "acne"], "sensitive_safe": True, "actives": False, "ingredient": "Red Bean, Kaolin Clay", "blurb": "A gentle clay wash-off that keeps pores and sebum in check without the tight, chalky aftermath."},
     {"id": "goodal-vitc-mask", "brand": "Goodal", "name": "Green Tangerine Vita C Dark Spot Care Serum Sheet Mask", "category": "mask", "price": 4, "skin_types": ["all"], "concerns": ["dark-spots", "dullness"], "sensitive_safe": True, "actives": False, "ingredient": "Green Tangerine Vitamin C, Niacinamide", "blurb": "A hypoallergenic microfiber sheet steeped in peak-season green tangerine. The weekly reach for stubborn dark spots and uneven tone."},
 ]
+
+
+def validate_products(products, concern_ids):
+    """Validate curated product rows before they ever reach the DB.
+
+    A malformed row (missing/misspelled field, unknown category, concern id
+    that doesn't exist, etc.) doesn't error anywhere in scoring.py — it just
+    silently never matches. Fail loudly here instead. Raises ValueError on the
+    first violation found, naming the offending product's id/index and the
+    exact rule that failed.
+
+    Only applies to curated products (this module's PRODUCTS) — import_external.py
+    intentionally inserts "external" rows with empty skin_types/concerns by
+    design and must never be run through this.
+    """
+    seen_ids: set[str] = set()
+
+    for index, product in enumerate(products):
+        label = product.get("id") or f"<index {index}>"
+
+        for field in REQUIRED_PRODUCT_FIELDS:
+            if field not in product:
+                raise ValueError(f"Product {label}: missing required field '{field}'")
+
+        product_id = product["id"]
+        if not isinstance(product_id, str) or not product_id.strip():
+            raise ValueError(f"Product {label}: 'id' must be a non-empty string")
+        if product_id in seen_ids:
+            raise ValueError(f"Product {product_id}: duplicate id — ids must be unique")
+        seen_ids.add(product_id)
+
+        for field in ("brand", "name", "ingredient"):
+            value = product[field]
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"Product {product_id}: '{field}' must be a non-empty string")
+
+        category = product["category"]
+        if category not in VALID_CATEGORIES:
+            raise ValueError(
+                f"Product {product_id}: invalid category '{category}' "
+                f"(must be one of {sorted(VALID_CATEGORIES)})"
+            )
+
+        skin_types = product["skin_types"]
+        if not isinstance(skin_types, list) or not skin_types:
+            raise ValueError(f"Product {product_id}: 'skin_types' must be a non-empty list")
+        for skin_type in skin_types:
+            if skin_type not in VALID_SKIN_TYPES:
+                raise ValueError(
+                    f"Product {product_id}: invalid skin_type '{skin_type}' "
+                    f"(must be one of {sorted(VALID_SKIN_TYPES)})"
+                )
+
+        concerns = product["concerns"]
+        if not isinstance(concerns, list):
+            raise ValueError(f"Product {product_id}: 'concerns' must be a list")
+        for concern in concerns:
+            if concern not in concern_ids:
+                raise ValueError(
+                    f"Product {product_id}: invalid concern '{concern}' "
+                    f"(must be one of {sorted(concern_ids)})"
+                )
+
+        for field in ("sensitive_safe", "actives"):
+            value = product[field]
+            if not isinstance(value, bool):
+                raise ValueError(
+                    f"Product {product_id}: '{field}' must be a bool, got {type(value).__name__}"
+                )
