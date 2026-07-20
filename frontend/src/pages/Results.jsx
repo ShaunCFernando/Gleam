@@ -77,7 +77,7 @@ export default function Results() {
               </div>
 
               <div className="min-w-0 flex-1 pb-7">
-                <div className="mb-2.5 mt-1 text-[11.5px] font-bold uppercase tracking-[0.18em] text-primary">
+                <div className="mb-2.5 mt-1 text-[11px] font-bold uppercase tracking-[0.28em] text-primary">
                   {stepResult.label}
                 </div>
 
