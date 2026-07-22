@@ -170,7 +170,7 @@ export default function Home() {
             >
               Gleam
             </motion.div>
-            <h1 className="mt-3 font-serif-display text-4xl leading-[1.08] sm:text-6xl lg:text-[4.2rem]">
+            <h1 className="mt-3 font-serif-display text-4xl leading-[1.08] sm:text-6xl lg:text-6xl">
               {heroLine1.map((word, i) => (
                 <ConvergeWord
                   key={word}
