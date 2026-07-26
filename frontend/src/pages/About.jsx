@@ -131,7 +131,7 @@ export default function About() {
             alt="A traditional Korean ginseng shop"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/35 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+          <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Chelaxy Designs / Unsplash
           </span>
         </motion.div>
