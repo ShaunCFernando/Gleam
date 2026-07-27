@@ -174,7 +174,7 @@ export default function Build() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="font-serif-display text-xl">Choose a {openStepLabel.toLowerCase()}</h2>
-                <Button size="icon" variant="ghost" onClick={() => setOpenCategory(null)}>
+                <Button size="icon" variant="ghost" aria-label="Close" onClick={() => setOpenCategory(null)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
