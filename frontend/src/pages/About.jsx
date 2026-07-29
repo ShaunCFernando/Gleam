@@ -42,7 +42,9 @@ function IngredientSpotlight() {
       SPOTLIGHTS.map(({ query }) =>
         getProducts(query).then((results) => results.find((p) => p.image_url) ?? null)
       )
-    ).then((results) => setProducts(results.filter(Boolean)));
+    )
+      .then((results) => setProducts(results.filter(Boolean)))
+      .catch(() => setProducts([]));
   }, []);
 
   if (products && products.length === 0) return null;
