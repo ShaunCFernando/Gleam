@@ -121,8 +121,8 @@ export default function Results() {
                       </div>
                       {stepResult.alt && (
                         <div className="mt-2.5 text-sm text-muted-foreground">
-                          Also good: {stepResult.alt.product.brand} {stepResult.alt.product.name} ($
-                          {stepResult.alt.product.price})
+                          Also good: {stepResult.alt.product.brand} {stepResult.alt.product.name}
+                          {stepResult.alt.product.price != null && ` ($${stepResult.alt.product.price})`}
                         </div>
                       )}
                     </CardContent>
