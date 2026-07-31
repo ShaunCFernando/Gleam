@@ -93,7 +93,7 @@ function StepRow({ step, index, pick, isActive, side, onChoose, onRemove, rowRef
               <div className={cn("flex items-start gap-3", alignRight && "flex-row-reverse")}>
                 <ProductThumb product={pick} className="h-14 w-14 shrink-0 rounded-xl object-contain p-1" />
                 <div className="min-w-0 flex-1">
-                  <div className="text-[11px] font-semibold uppercase tracking-wide text-primary">{step.label}</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">{step.label}</div>
                   <div className="truncate font-serif-display text-base leading-snug">
                     {pick.brand} {pick.name}
                   </div>
@@ -136,7 +136,7 @@ function StepRow({ step, index, pick, isActive, side, onChoose, onRemove, rowRef
               alignRight ? "items-end text-right" : "items-start text-left"
             )}
           >
-            <span className="text-[11px] font-semibold uppercase tracking-wide">{step.label}</span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.28em]">{step.label}</span>
             <span className="text-sm">+ Choose a {step.label.toLowerCase()}</span>
           </motion.button>
         )}
