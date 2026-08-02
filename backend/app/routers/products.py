@@ -49,7 +49,7 @@ def list_products(
 
 @router.get("/{product_id}", response_model=schemas.ProductOut)
 def get_product(product_id: str, db: Session = Depends(get_db)):
-    product = db.query(models.Product).get(product_id)
+    product = db.get(models.Product, product_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product

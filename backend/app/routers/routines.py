@@ -34,7 +34,7 @@ def create_routine(answers: schemas.QuizAnswers, db: Session = Depends(get_db)):
 
 @router.get("/{slug}", response_model=schemas.RoutineOut)
 def get_routine(slug: str, db: Session = Depends(get_db)):
-    saved = db.query(models.SavedRoutine).get(slug)
+    saved = db.get(models.SavedRoutine, slug)
     if saved is None:
         raise HTTPException(status_code=404, detail="Routine not found")
     answers = schemas.QuizAnswers(
