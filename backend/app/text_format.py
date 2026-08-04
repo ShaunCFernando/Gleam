@@ -69,7 +69,7 @@ def format_ingredients(raw_text: str, limit: int = 3) -> str:
     if not raw_text or not raw_text.strip():
         return "Ingredients not listed."
 
-    tokens = [t.strip() for t in raw_text.split(",") if t.strip()]
+    tokens = [t.strip() for t in re.split(r"(?<!\d),(?!\d)", raw_text) if t.strip()]
     if not tokens:
         return "Ingredients not listed."
 
