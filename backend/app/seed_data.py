@@ -25,11 +25,13 @@ REQUIRED_PRODUCT_FIELDS = (
     "brand",
     "name",
     "category",
+    "price",
     "skin_types",
     "concerns",
     "sensitive_safe",
     "actives",
     "ingredient",
+    "blurb",
 )
 
 CONCERNS = [
@@ -235,10 +237,16 @@ def validate_products(products, concern_ids):
             raise ValueError(f"Product {product_id}: duplicate id — ids must be unique")
         seen_ids.add(product_id)
 
-        for field in ("brand", "name", "ingredient"):
+        for field in ("brand", "name", "ingredient", "blurb"):
             value = product[field]
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"Product {product_id}: '{field}' must be a non-empty string")
+
+        price = product["price"]
+        if not isinstance(price, (int, float)) or price < 0:
+            raise ValueError(
+                f"Product {product_id}: 'price' must be a non-negative number, got {type(price).__name__} {price!r}"
+            )
 
         category = product["category"]
         if category not in VALID_CATEGORIES:
