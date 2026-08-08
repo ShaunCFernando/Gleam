@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { getProducts } from "@/api";
+import { getConcerns, getProducts } from "@/api";
 import PageContainer from "@/components/PageContainer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -58,10 +58,18 @@ export default function Catalog() {
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("all");
   const [skinType, setSkinType] = useState("all");
+  const [concern, setConcern] = useState("all");
+  const [concerns, setConcerns] = useState([]);
   const [curatedOnly, setCuratedOnly] = useState(false);
   const [sort, setSort] = useState("name");
   const [products, setProducts] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getConcerns()
+      .then(setConcerns)
+      .catch((err) => setError(err.message));
+  }, []);
 
   useEffect(() => {
     const handle = setTimeout(() => {
@@ -69,6 +77,7 @@ export default function Catalog() {
         q,
         category: category === "all" ? undefined : category,
         skin_type: skinType === "all" ? undefined : skinType,
+        concern: concern === "all" ? undefined : concern,
         sort,
         source: curatedOnly ? "curated" : undefined,
       })
@@ -76,7 +85,9 @@ export default function Catalog() {
         .catch((err) => setError(err.message));
     }, 200);
     return () => clearTimeout(handle);
-  }, [q, category, skinType, sort, curatedOnly]);
+  }, [q, category, skinType, concern, sort, curatedOnly]);
+
+  const CONCERNS = [{ value: "all", label: "All concerns" }, ...concerns.map((c) => ({ value: c.id, label: c.label }))];
 
   return (
     <PageContainer className="max-w-5xl py-10 sm:py-14">
@@ -116,6 +127,19 @@ export default function Catalog() {
             {SKIN_TYPES.map((s) => (
               <SelectItem key={s.value} value={s.value}>
                 {s.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={concern} onValueChange={setConcern}>
+          <SelectTrigger className="w-[168px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {CONCERNS.map((c) => (
+              <SelectItem key={c.value} value={c.value}>
+                {c.label}
               </SelectItem>
             ))}
           </SelectContent>

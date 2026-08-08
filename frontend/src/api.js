@@ -16,6 +16,10 @@ export function getQuizConfig() {
   return request("/api/quiz-config");
 }
 
+export function getConcerns() {
+  return request("/api/concerns");
+}
+
 export function getProducts(params = {}) {
   const query = new URLSearchParams(
     Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== "")
