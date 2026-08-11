@@ -117,7 +117,7 @@ export default function RoutineLineup() {
                   alt={step.imageAlt}
                   className="h-64 w-auto object-contain sm:h-80 lg:h-[26rem]"
                 />
-                <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                   {step.label}
                 </span>
               </motion.div>

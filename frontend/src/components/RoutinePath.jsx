@@ -227,7 +227,7 @@ export default function RoutinePath({ steps, picks, onChoose, onRemove }) {
             </button>
           );
         })}
-        <div className="mt-2 text-center text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="mt-2 text-center text-[10px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
           {doneCount}/{steps.length}
         </div>
       </div>
