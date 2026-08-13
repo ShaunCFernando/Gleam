@@ -33,7 +33,7 @@ export default function FeatureRow({
           className="absolute inset-0 h-[130%] w-full object-cover"
         />
         {imageCredit && (
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/35 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+          <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             {imageCredit}
           </span>
         )}

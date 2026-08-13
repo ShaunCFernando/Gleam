@@ -42,7 +42,9 @@ function IngredientSpotlight() {
       SPOTLIGHTS.map(({ query }) =>
         getProducts(query).then((results) => results.find((p) => p.image_url) ?? null)
       )
-    ).then((results) => setProducts(results.filter(Boolean)));
+    )
+      .then((results) => setProducts(results.filter(Boolean)))
+      .catch(() => setProducts([]));
   }, []);
 
   if (products && products.length === 0) return null;
@@ -131,7 +133,7 @@ export default function About() {
             alt="A traditional Korean ginseng shop"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/35 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+          <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Chelaxy Designs / Unsplash
           </span>
         </motion.div>

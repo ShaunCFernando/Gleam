@@ -238,7 +238,7 @@ export default function Home() {
             alt="Applying facial serum as part of a skincare routine"
             className="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
           />
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/35 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+          <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Anna Nekrashevich / Pexels
           </span>
         </motion.div>
@@ -290,7 +290,7 @@ export default function Home() {
             style={{ y: hydrationImageY }}
             className="absolute inset-0 h-[130%] w-full object-cover"
           />
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/35 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+          <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Nataliya Melnychuk / Unsplash
           </span>
         </div>
