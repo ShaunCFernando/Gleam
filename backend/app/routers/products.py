@@ -38,9 +38,9 @@ def list_products(
         query = query.filter(models.Product.price <= max_price)
 
     if sort == "price_asc":
-        query = query.order_by(models.Product.price.asc())
+        query = query.order_by(models.Product.price.asc().nulls_last())
     elif sort == "price_desc":
-        query = query.order_by(models.Product.price.desc())
+        query = query.order_by(models.Product.price.desc().nulls_last())
     else:
         query = query.order_by(models.Product.brand.asc(), models.Product.name.asc())
 
