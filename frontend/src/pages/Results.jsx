@@ -93,8 +93,8 @@ export default function Results() {
                         />
                       )}
                       <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                        <div className="min-w-0">
+                          <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
                             {pick.product.brand}
                           </div>
                           <div className="font-serif-display text-lg leading-snug">{pick.product.name}</div>
