@@ -97,7 +97,7 @@ export default function Results() {
                           <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
                             {pick.product.brand}
                           </div>
-                          <div className="font-serif-display text-lg leading-snug">{pick.product.name}</div>
+                          <div className="truncate font-serif-display text-lg leading-snug">{pick.product.name}</div>
                         </div>
                         {pick.product.price != null && (
                           <div className="whitespace-nowrap font-semibold text-primary">

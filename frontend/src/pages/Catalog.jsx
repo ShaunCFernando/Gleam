@@ -190,7 +190,7 @@ export default function Catalog() {
                         <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
                           {p.brand}
                         </div>
-                        <div className="font-serif-display text-lg leading-snug">{p.name}</div>
+                        <div className="truncate font-serif-display text-lg leading-snug">{p.name}</div>
                       </div>
                       {p.price != null && (
                         <div className="whitespace-nowrap font-semibold text-primary">${p.price}</div>
