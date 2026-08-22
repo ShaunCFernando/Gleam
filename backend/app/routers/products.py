@@ -26,8 +26,14 @@ def list_products(
     if source:
         query = query.filter(models.Product.source == source)
     if q:
-        like = f"%{q}%"
-        query = query.filter(or_(models.Product.name.ilike(like), models.Product.brand.ilike(like)))
+        escaped = q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        like = f"%{escaped}%"
+        query = query.filter(
+            or_(
+                models.Product.name.ilike(like, escape="\\"),
+                models.Product.brand.ilike(like, escape="\\"),
+            )
+        )
     if category:
         query = query.filter(models.Product.category == category)
     if skin_type:
