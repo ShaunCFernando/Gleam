@@ -37,7 +37,12 @@ def list_products(
     if category:
         query = query.filter(models.Product.category == category)
     if skin_type:
-        query = query.filter(models.Product.skin_types.any(skin_type))
+        query = query.filter(
+            or_(
+                models.Product.skin_types.any(skin_type),
+                models.Product.skin_types.any("all"),
+            )
+        )
     if concern:
         query = query.filter(models.Product.concerns.any(concern))
     if max_price is not None:
