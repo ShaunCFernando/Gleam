@@ -90,6 +90,15 @@ export default function Build() {
     return () => clearTimeout(handle);
   }, [openCategory, search]);
 
+  useEffect(() => {
+    if (!openCategory) return;
+    function handleKeyDown(e) {
+      if (e.key === "Escape") setOpenCategory(null);
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [openCategory]);
+
   function selectProduct(category, product) {
     setPicks((prev) => ({ ...prev, [category]: product }));
     setOpenCategory(null);
@@ -170,6 +179,9 @@ export default function Build() {
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-lg"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Choose a ${openStepLabel.toLowerCase()}`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
