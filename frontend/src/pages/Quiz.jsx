@@ -11,10 +11,35 @@ import { cn } from "@/lib/utils";
 
 const PROGRESS_KEY = "gleam:quiz-progress";
 
+const DEFAULT_ANSWERS = {
+  skin_type: null,
+  sensitivity: null,
+  concerns: [],
+  budget: null,
+  routine_size: null,
+};
+
 function loadSavedProgress() {
   try {
     const raw = localStorage.getItem(PROGRESS_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+
+    const stepIndex =
+      Number.isInteger(parsed.stepIndex) && parsed.stepIndex >= 0 ? parsed.stepIndex : 0;
+
+    const rawAnswers =
+      parsed.answers && typeof parsed.answers === "object" && !Array.isArray(parsed.answers)
+        ? parsed.answers
+        : {};
+    const answers = {
+      ...DEFAULT_ANSWERS,
+      ...rawAnswers,
+      concerns: Array.isArray(rawAnswers.concerns) ? rawAnswers.concerns : [],
+    };
+
+    return { stepIndex, answers };
   } catch {
     return null;
   }
@@ -51,15 +76,7 @@ export default function Quiz() {
 
   const saved = useMemo(loadSavedProgress, []);
   const [stepIndex, setStepIndex] = useState(saved?.stepIndex ?? 0);
-  const [answers, setAnswers] = useState(
-    saved?.answers ?? {
-      skin_type: null,
-      sensitivity: null,
-      concerns: [],
-      budget: null,
-      routine_size: null,
-    }
-  );
+  const [answers, setAnswers] = useState(saved?.answers ?? DEFAULT_ANSWERS);
   const [advancing, setAdvancing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -67,7 +84,10 @@ export default function Quiz() {
 
   useEffect(() => {
     getQuizConfig()
-      .then(setSteps)
+      .then((data) => {
+        setSteps(data);
+        setStepIndex((i) => Math.min(Math.max(i, 0), data.length - 1));
+      })
       .catch((err) => setConfigError(err.message));
   }, []);
 
