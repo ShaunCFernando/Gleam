@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getProduct, getProducts } from "@/api";
 import PageContainer from "@/components/PageContainer";
@@ -47,6 +47,8 @@ export default function Build() {
   const [openCategory, setOpenCategory] = useState(null);
   const [options, setOptions] = useState(null);
   const [search, setSearch] = useState("");
+  const dialogRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   // Only ids are persisted; hydrate to full product objects on mount so a
   // stored pick always reflects current price/tags rather than a stale copy.
@@ -90,10 +92,44 @@ export default function Build() {
     return () => clearTimeout(handle);
   }, [openCategory, search]);
 
+  // Lock page scroll while the dialog is open and restore focus to whatever
+  // triggered it (typically a step button in RoutinePath) once it closes.
+  useEffect(() => {
+    if (!openCategory) return;
+    previousFocusRef.current = document.activeElement;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+      previousFocusRef.current?.focus?.();
+    };
+  }, [openCategory]);
+
   useEffect(() => {
     if (!openCategory) return;
     function handleKeyDown(e) {
-      if (e.key === "Escape") setOpenCategory(null);
+      if (e.key === "Escape") {
+        setOpenCategory(null);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      const focusable = Array.from(
+        dialog.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])')
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey) {
+        if (active === first || !dialog.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !dialog.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -179,6 +215,7 @@ export default function Build() {
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-lg"
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label={`Choose a ${openStepLabel.toLowerCase()}`}
