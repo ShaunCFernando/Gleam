@@ -48,11 +48,13 @@ BRANDS = [
 ]
 
 CATEGORY_KEYWORDS = [
+    # spf must be checked first: "sun serum"/"sun essence" naming (common in
+    # K-beauty sunscreens) would otherwise collide with the essence/serum entries.
+    ("spf", ["sun cream", "suncream", "sunscreen", "spf", "sun stick", "sun serum"]),
     ("essence", ["essence"]),
     ("serum", ["serum", "ampoule"]),
     ("toner", ["toner", "skin softener", "toning lotion"]),
     ("cleanser", ["cleanser", "cleansing", "foam wash", "face wash"]),
-    ("spf", ["sun cream", "suncream", "sunscreen", "spf", "sun stick", "sun serum"]),
     ("mask", ["sheet mask", " mask", "patch"]),
     ("moisturizer", ["cream", "lotion", "moisturiz", "moistur", "emulsion", "gel cream"]),
 ]
