@@ -15,6 +15,7 @@ export default function Results() {
   const [routine, setRoutine] = useState(null);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(null);
 
   useEffect(() => {
     setRoutine(null);
@@ -25,10 +26,20 @@ export default function Results() {
   }, [slug]);
 
   function copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    });
+    if (!navigator.clipboard) {
+      setCopyError("Couldn't copy — copy the link from your address bar instead.");
+      return;
+    }
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        setCopyError(null);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1800);
+      })
+      .catch(() => {
+        setCopyError("Couldn't copy — copy the link from your address bar instead.");
+      });
   }
 
   if (error) {
@@ -157,6 +168,7 @@ export default function Results() {
           Start over
         </Button>
       </div>
+      {copyError && <p className="mt-4 text-sm text-destructive">{copyError}</p>}
     </PageContainer>
   );
 }

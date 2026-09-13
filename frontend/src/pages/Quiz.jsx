@@ -92,7 +92,11 @@ export default function Quiz() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify({ stepIndex, answers }));
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({ stepIndex, answers }));
+    } catch {
+      // Best-effort persistence only; ignore storage failures.
+    }
   }, [stepIndex, answers]);
 
   if (configError) {
@@ -118,7 +122,11 @@ export default function Quiz() {
     setSubmitError(null);
     try {
       const routine = await createRoutine(finalAnswers);
-      localStorage.removeItem(PROGRESS_KEY);
+      try {
+        localStorage.removeItem(PROGRESS_KEY);
+      } catch {
+        // Best-effort cleanup only; ignore storage failures.
+      }
       navigate(`/r/${routine.slug}`);
     } catch (err) {
       setSubmitError(err.message);

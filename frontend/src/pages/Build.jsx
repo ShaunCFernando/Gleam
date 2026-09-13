@@ -76,7 +76,11 @@ export default function Build() {
   useEffect(() => {
     if (!hydrated) return;
     const ids = Object.fromEntries(Object.entries(picks).map(([category, p]) => [category, p.id]));
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(ids));
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(ids));
+    } catch {
+      // Best-effort persistence only; ignore storage failures.
+    }
   }, [picks, hydrated]);
 
   useEffect(() => {
