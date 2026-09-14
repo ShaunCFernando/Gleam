@@ -178,7 +178,7 @@ export default function Quiz() {
         {stepIndex > 0 && (
           <button
             onClick={goBack}
-            disabled={submitting}
+            disabled={submitting || advancing}
             className="flex items-center gap-1 hover:text-foreground disabled:opacity-40"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back
