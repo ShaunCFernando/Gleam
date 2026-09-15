@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getConcerns, getProducts } from "@/api";
 import PageContainer from "@/components/PageContainer";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,8 @@ const SORTS = [
   { value: "price_desc", label: "Price: high to low" },
 ];
 
+const PAGE_SIZE = 30;
+
 function ProductImage({ product }) {
   if (product.image_url) {
     return (
@@ -64,6 +67,14 @@ export default function Catalog() {
   const [sort, setSort] = useState("name");
   const [products, setProducts] = useState(null);
   const [error, setError] = useState(null);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  // Guards against a slow "load more" response landing after the filters have
+  // since changed, which would otherwise append stale-filter results onto a
+  // freshly replaced list (see d722702 for the same stale-async-write pattern).
+  const filterEpochRef = useRef(0);
 
   useEffect(() => {
     getConcerns()
@@ -73,6 +84,7 @@ export default function Catalog() {
 
   useEffect(() => {
     const handle = setTimeout(() => {
+      const epoch = ++filterEpochRef.current;
       getProducts({
         q,
         category: category === "all" ? undefined : category,
@@ -80,12 +92,49 @@ export default function Catalog() {
         concern: concern === "all" ? undefined : concern,
         sort,
         source: curatedOnly ? "curated" : undefined,
+        limit: PAGE_SIZE,
+        offset: 0,
       })
-        .then(setProducts)
-        .catch((err) => setError(err.message));
+        .then((data) => {
+          if (filterEpochRef.current !== epoch) return;
+          setProducts(data);
+          setOffset(0);
+          setHasMore(data.length === PAGE_SIZE);
+        })
+        .catch((err) => {
+          if (filterEpochRef.current !== epoch) return;
+          setError(err.message);
+        });
     }, 200);
     return () => clearTimeout(handle);
   }, [q, category, skinType, concern, sort, curatedOnly]);
+
+  function loadMore() {
+    const epoch = filterEpochRef.current;
+    const nextOffset = offset + PAGE_SIZE;
+    setLoadingMore(true);
+    getProducts({
+      q,
+      category: category === "all" ? undefined : category,
+      skin_type: skinType === "all" ? undefined : skinType,
+      concern: concern === "all" ? undefined : concern,
+      sort,
+      source: curatedOnly ? "curated" : undefined,
+      limit: PAGE_SIZE,
+      offset: nextOffset,
+    })
+      .then((data) => {
+        if (filterEpochRef.current !== epoch) return;
+        setProducts((prev) => [...(prev ?? []), ...data]);
+        setOffset(nextOffset);
+        setHasMore(data.length === PAGE_SIZE);
+      })
+      .catch((err) => {
+        if (filterEpochRef.current !== epoch) return;
+        setError(err.message);
+      })
+      .finally(() => setLoadingMore(false));
+  }
 
   const CONCERNS = [{ value: "all", label: "All concerns" }, ...concerns.map((c) => ({ value: c.id, label: c.label }))];
 
@@ -216,6 +265,14 @@ export default function Catalog() {
           Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-80 w-full" />)
         )}
       </div>
+
+      {products && hasMore && (
+        <div className="mt-10 flex justify-center">
+          <Button variant="outline" onClick={loadMore} disabled={loadingMore}>
+            {loadingMore ? "Loading…" : "Load more"}
+          </Button>
+        </div>
+      )}
     </PageContainer>
   );
 }

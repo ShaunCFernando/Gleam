@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
@@ -19,6 +19,8 @@ def list_products(
     max_price: Optional[float] = None,
     source: Optional[str] = None,
     sort: str = "name",
+    limit: Optional[int] = Query(default=None, gt=0, le=100),
+    offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
 ):
     query = db.query(models.Product)
@@ -54,6 +56,9 @@ def list_products(
         query = query.order_by(models.Product.price.desc().nulls_last())
     else:
         query = query.order_by(models.Product.brand.asc(), models.Product.name.asc())
+
+    if limit is not None:
+        query = query.offset(offset).limit(limit)
 
     return query.all()
 
