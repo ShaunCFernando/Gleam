@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Check } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { createRoutine, getQuizConfig } from "@/api";
@@ -82,6 +82,18 @@ export default function Quiz() {
   const [submitError, setSubmitError] = useState(null);
   const [direction, setDirection] = useState(1);
 
+  const mountedRef = useRef(true);
+  const advanceTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+      if (advanceTimeoutRef.current) {
+        clearTimeout(advanceTimeoutRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     getQuizConfig()
       .then((data) => {
@@ -127,8 +139,10 @@ export default function Quiz() {
       } catch {
         // Best-effort cleanup only; ignore storage failures.
       }
+      if (!mountedRef.current) return;
       navigate(`/r/${routine.slug}`);
     } catch (err) {
+      if (!mountedRef.current) return;
       setSubmitError(err.message);
       setSubmitting(false);
     }
@@ -147,7 +161,8 @@ export default function Quiz() {
     const next = { ...answers, [step.id]: value };
     setAnswers(next);
     setAdvancing(true);
-    setTimeout(() => {
+    advanceTimeoutRef.current = setTimeout(() => {
+      advanceTimeoutRef.current = null;
       setAdvancing(false);
       advance(next);
     }, 220);
