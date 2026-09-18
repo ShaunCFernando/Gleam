@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getRoutine } from "@/api";
@@ -16,6 +16,18 @@ export default function Results() {
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(null);
+
+  const mountedRef = useRef(true);
+  const copiedTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+      if (copiedTimeoutRef.current) {
+        clearTimeout(copiedTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setRoutine(null);
@@ -35,7 +47,15 @@ export default function Results() {
       .then(() => {
         setCopyError(null);
         setCopied(true);
-        setTimeout(() => setCopied(false), 1800);
+        if (copiedTimeoutRef.current) {
+          clearTimeout(copiedTimeoutRef.current);
+        }
+        copiedTimeoutRef.current = setTimeout(() => {
+          copiedTimeoutRef.current = null;
+          if (mountedRef.current) {
+            setCopied(false);
+          }
+        }, 1800);
       })
       .catch(() => {
         setCopyError("Couldn't copy — copy the link from your address bar instead.");
