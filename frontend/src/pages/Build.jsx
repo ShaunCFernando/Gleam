@@ -182,7 +182,7 @@ export default function Build() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-lg"
+              className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-md"
               role="dialog"
               aria-modal="true"
               aria-label={`Choose a ${openStepLabel.toLowerCase()}`}

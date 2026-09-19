@@ -57,8 +57,9 @@ def list_products(
     else:
         query = query.order_by(models.Product.brand.asc(), models.Product.name.asc())
 
+    query = query.offset(offset)
     if limit is not None:
-        query = query.offset(offset).limit(limit)
+        query = query.limit(limit)
 
     return query.all()
 
