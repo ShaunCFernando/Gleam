@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getProduct, getProducts } from "@/api";
 import PageContainer from "@/components/PageContainer";
@@ -47,6 +47,13 @@ export default function Build() {
   const [openCategory, setOpenCategory] = useState(null);
   const [options, setOptions] = useState(null);
   const [search, setSearch] = useState("");
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   // Only ids are persisted; hydrate to full product objects on mount so a
   // stored pick always reflects current price/tags rather than a stale copy.
@@ -64,6 +71,7 @@ export default function Build() {
           .catch(() => [category, null])
       )
     ).then((results) => {
+      if (!mountedRef.current) return;
       const next = {};
       for (const [category, product] of results) {
         if (product) next[category] = product;
@@ -88,8 +96,14 @@ export default function Build() {
     setOptions(null);
     const handle = setTimeout(() => {
       getProducts({ category: openCategory, source: "curated", q: search || undefined })
-        .then(setOptions)
-        .catch(() => setOptions([]));
+        .then((results) => {
+          if (!mountedRef.current) return;
+          setOptions(results);
+        })
+        .catch(() => {
+          if (!mountedRef.current) return;
+          setOptions([]);
+        });
     }, 150);
     return () => clearTimeout(handle);
   }, [openCategory, search]);
