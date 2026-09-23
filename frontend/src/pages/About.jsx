@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { BadgeCheck, FlaskConical, Layers, Leaf, ShieldHalf } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getProducts } from "@/api";
@@ -36,6 +36,13 @@ const SPOTLIGHTS = [
 
 function IngredientSpotlight() {
   const [products, setProducts] = useState(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     Promise.all(
@@ -43,8 +50,14 @@ function IngredientSpotlight() {
         getProducts(query).then((results) => results.find((p) => p.image_url) ?? null)
       )
     )
-      .then((results) => setProducts(results.filter(Boolean)))
-      .catch(() => setProducts([]));
+      .then((results) => {
+        if (!mountedRef.current) return;
+        setProducts(results.filter(Boolean));
+      })
+      .catch(() => {
+        if (!mountedRef.current) return;
+        setProducts([]);
+      });
   }, []);
 
   if (products && products.length === 0) return null;

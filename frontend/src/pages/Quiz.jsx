@@ -97,10 +97,14 @@ export default function Quiz() {
   useEffect(() => {
     getQuizConfig()
       .then((data) => {
+        if (!mountedRef.current) return;
         setSteps(data);
         setStepIndex((i) => Math.min(Math.max(i, 0), data.length - 1));
       })
-      .catch((err) => setConfigError(err.message));
+      .catch((err) => {
+        if (!mountedRef.current) return;
+        setConfigError(err.message);
+      });
   }, []);
 
   useEffect(() => {

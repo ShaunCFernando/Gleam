@@ -33,8 +33,14 @@ export default function Results() {
     setRoutine(null);
     setError(null);
     getRoutine(slug)
-      .then(setRoutine)
-      .catch((err) => setError(err.message));
+      .then((data) => {
+        if (!mountedRef.current) return;
+        setRoutine(data);
+      })
+      .catch((err) => {
+        if (!mountedRef.current) return;
+        setError(err.message);
+      });
   }, [slug]);
 
   function copyLink() {

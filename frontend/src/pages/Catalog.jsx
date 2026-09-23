@@ -75,11 +75,24 @@ export default function Catalog() {
   // since changed, which would otherwise append stale-filter results onto a
   // freshly replaced list (see d722702 for the same stale-async-write pattern).
   const filterEpochRef = useRef(0);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     getConcerns()
-      .then(setConcerns)
-      .catch((err) => setError(err.message));
+      .then((data) => {
+        if (!mountedRef.current) return;
+        setConcerns(data);
+      })
+      .catch((err) => {
+        if (!mountedRef.current) return;
+        setError(err.message);
+      });
   }, []);
 
   useEffect(() => {
@@ -96,13 +109,13 @@ export default function Catalog() {
         offset: 0,
       })
         .then((data) => {
-          if (filterEpochRef.current !== epoch) return;
+          if (filterEpochRef.current !== epoch || !mountedRef.current) return;
           setProducts(data);
           setOffset(0);
           setHasMore(data.length === PAGE_SIZE);
         })
         .catch((err) => {
-          if (filterEpochRef.current !== epoch) return;
+          if (filterEpochRef.current !== epoch || !mountedRef.current) return;
           setError(err.message);
         });
     }, 200);
@@ -124,16 +137,19 @@ export default function Catalog() {
       offset: nextOffset,
     })
       .then((data) => {
-        if (filterEpochRef.current !== epoch) return;
+        if (filterEpochRef.current !== epoch || !mountedRef.current) return;
         setProducts((prev) => [...(prev ?? []), ...data]);
         setOffset(nextOffset);
         setHasMore(data.length === PAGE_SIZE);
       })
       .catch((err) => {
-        if (filterEpochRef.current !== epoch) return;
+        if (filterEpochRef.current !== epoch || !mountedRef.current) return;
         setError(err.message);
       })
-      .finally(() => setLoadingMore(false));
+      .finally(() => {
+        if (!mountedRef.current) return;
+        setLoadingMore(false);
+      });
   }
 
   const CONCERNS = [{ value: "all", label: "All concerns" }, ...concerns.map((c) => ({ value: c.id, label: c.label }))];

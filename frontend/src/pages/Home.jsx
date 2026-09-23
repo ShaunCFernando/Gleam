@@ -87,11 +87,24 @@ function PillarCard({ pillar, index, scrollYProgress }) {
 
 function FeaturedProducts() {
   const [products, setProducts] = useState(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     getProducts()
-      .then((all) => setProducts(all.filter((p) => p.image_url).slice(0, 4)))
-      .catch(() => setProducts([]));
+      .then((all) => {
+        if (!mountedRef.current) return;
+        setProducts(all.filter((p) => p.image_url).slice(0, 4));
+      })
+      .catch(() => {
+        if (!mountedRef.current) return;
+        setProducts([]);
+      });
   }, []);
 
   if (products && products.length === 0) return null;
