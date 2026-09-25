@@ -18,6 +18,11 @@ def _to_routine_out(slug: str, answers: schemas.QuizAnswers, db: Session) -> sch
 
 @router.post("", response_model=schemas.RoutineOut)
 def create_routine(answers: schemas.QuizAnswers, db: Session = Depends(get_db)):
+    known_ids = {c.id for c in db.query(models.Concern).all()}
+    invalid_ids = [c for c in answers.concerns if c not in known_ids]
+    if invalid_ids:
+        raise HTTPException(status_code=422, detail=f"Unknown concern id(s): {', '.join(invalid_ids)}")
+
     saved = models.SavedRoutine(
         slug=uuid.uuid4().hex[:10],
         skin_type=answers.skin_type,
