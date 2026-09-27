@@ -23,6 +23,15 @@ def create_routine(answers: schemas.QuizAnswers, db: Session = Depends(get_db)):
     if invalid_ids:
         raise HTTPException(status_code=422, detail=f"Unknown concern id(s): {', '.join(invalid_ids)}")
 
+    seen_ids = set()
+    duplicate_ids = []
+    for c in answers.concerns:
+        if c in seen_ids and c not in duplicate_ids:
+            duplicate_ids.append(c)
+        seen_ids.add(c)
+    if duplicate_ids:
+        raise HTTPException(status_code=422, detail=f"Duplicate concern id(s): {', '.join(duplicate_ids)}")
+
     saved = models.SavedRoutine(
         slug=uuid.uuid4().hex[:10],
         skin_type=answers.skin_type,
