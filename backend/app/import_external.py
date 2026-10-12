@@ -45,6 +45,9 @@ BRANDS = [
     "Holika Holika", "The Face Shop", "Nature Republic", "Banila Co",
     "Dr. Ceuracle", "Skinfood", "Mizon", "Benton", "Neogen", "Papa Recipe",
     "Heimish", "Jumiso", "Krave Beauty", "Make P:rem",
+    "Aromatica", "Beplain", "Biodance", "Bioheal BOH", "Blithe", "Celimax",
+    "Dr. Althea", "Dr.G", "Haruharu Wonder", "IOPE", "It's Skin", "Medicube",
+    "S.Nature", "SNP", "Secret Key", "Tocobo", "Tosowoong", "Whamisa", "d'Alba",
 ]
 
 CATEGORY_KEYWORDS = [
