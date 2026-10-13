@@ -40,12 +40,14 @@ const SORTS = [
 const PAGE_SIZE = 30;
 
 function ProductImage({ product }) {
-  if (product.image_url) {
+  const [broken, setBroken] = useState(false);
+  if (product.image_url && !broken) {
     return (
       <img
         src={product.image_url}
         alt=""
         loading="lazy"
+        onError={() => setBroken(true)}
         className="h-40 w-full rounded-t-2xl bg-muted object-contain p-4"
       />
     );

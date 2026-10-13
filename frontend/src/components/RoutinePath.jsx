@@ -47,8 +47,10 @@ function buildWindingPath(count, width, height, amplitude) {
 }
 
 function ProductThumb({ product, className }) {
-  if (product.image_url) {
-    return <img src={product.image_url} alt="" className={className} />;
+  const [broken, setBroken] = useState(false);
+  useEffect(() => setBroken(false), [product.id]);
+  if (product.image_url && !broken) {
+    return <img src={product.image_url} alt="" className={className} onError={() => setBroken(true)} />;
   }
   return (
     <div className={`flex items-center justify-center bg-muted font-serif-display text-primary/40 ${className}`}>

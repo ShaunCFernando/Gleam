@@ -126,6 +126,9 @@ export default function Results() {
                           src={pick.product.image_url}
                           alt=""
                           loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
                           className="mb-4 h-40 w-full rounded-xl bg-muted object-contain p-3"
                         />
                       )}
