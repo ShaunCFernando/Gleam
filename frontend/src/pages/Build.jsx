@@ -229,7 +229,7 @@ export default function Build() {
                     key={p.id}
                     type="button"
                     onClick={() => selectProduct(openCategory, p)}
-                    className="flex items-center gap-3 rounded-xl border border-border p-3 text-left transition-colors hover:border-primary/50 hover:bg-secondary"
+                    className="flex items-center gap-3 rounded-xl border border-border p-3 text-left transition-colors hover:border-primary/50 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-primary/50"
                   >
                     <ProductThumb product={p} className="h-12 w-12 shrink-0 rounded-lg object-contain p-0.5" />
                     <div className="min-w-0 flex-1">

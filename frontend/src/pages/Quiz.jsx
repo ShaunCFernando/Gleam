@@ -198,7 +198,7 @@ export default function Quiz() {
           <button
             onClick={goBack}
             disabled={submitting || advancing}
-            className="flex items-center gap-1 hover:text-foreground disabled:opacity-40"
+            className="flex items-center gap-1 rounded hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:text-foreground disabled:opacity-40"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>

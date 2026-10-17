@@ -210,7 +210,7 @@ export default function RoutinePath({ steps, picks, onChoose, onRemove }) {
               key={step.category}
               type="button"
               onClick={() => rowRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" })}
-              className="group relative flex items-center justify-center p-1"
+              className="group relative flex items-center justify-center p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
               aria-label={`Jump to ${step.label}`}
             >
               <motion.span
@@ -221,7 +221,7 @@ export default function RoutinePath({ steps, picks, onChoose, onRemove }) {
                 transition={{ duration: 0.2 }}
                 className="block h-2.5 w-2.5 rounded-full"
               />
-              <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-card px-2.5 py-1 text-xs text-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
+              <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-card px-2.5 py-1 text-xs text-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {step.label}
               </span>
             </button>
