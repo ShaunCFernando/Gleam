@@ -88,7 +88,7 @@ def build_routine(db: Session, answers):
             score, reasons = score_product(p, answers, concern_labels)
             if score > -50:
                 ranked.append((score, reasons, p))
-        ranked.sort(key=lambda r: r[0], reverse=True)
+        ranked.sort(key=lambda r: (-r[0], r[2].id))
 
         pick = ranked[0] if len(ranked) > 0 else None
         alt = ranked[1] if len(ranked) > 1 else None
