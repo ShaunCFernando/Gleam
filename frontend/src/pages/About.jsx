@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { BadgeCheck, FlaskConical, Layers, Leaf, ShieldHalf } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -103,10 +103,14 @@ function IngredientSpotlight() {
 export default function About() {
   const navigate = useNavigate();
 
+  const heroRef = useRef(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroImageY = useTransform(heroProgress, [0, 1], ["-6%", "6%"]);
+
   return (
     <div>
       {/* ---------- HERO ---------- */}
-      <div className="grid grid-cols-1 items-stretch lg:grid-cols-[1.1fr_1fr]">
+      <div ref={heroRef} className="grid grid-cols-1 items-stretch lg:grid-cols-[1.1fr_1fr]">
         <div className="flex items-center px-6 py-16 sm:px-12 sm:py-24 lg:px-16">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -141,10 +145,11 @@ export default function About() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="relative h-[320px] overflow-hidden sm:h-[440px] lg:h-auto"
         >
-          <img
+          <motion.img
             src={HERO_IMAGE}
             alt="A traditional Korean ginseng shop"
-            className="absolute inset-0 h-full w-full object-cover"
+            style={{ y: heroImageY }}
+            className="absolute inset-0 h-[130%] w-full object-cover"
           />
           <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Chelaxy Designs / Unsplash

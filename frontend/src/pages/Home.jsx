@@ -151,6 +151,7 @@ export default function Home() {
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroImageY = useTransform(heroProgress, [0, 1], ["-6%", "6%"]);
 
   const pillarsRef = useRef(null);
   const { scrollYProgress: pillarsProgress } = useScroll({ target: pillarsRef, offset: ["start end", "end center"] });
@@ -246,10 +247,11 @@ export default function Home() {
           transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
           className="relative h-[380px] overflow-hidden sm:h-[480px] lg:h-auto"
         >
-          <img
+          <motion.img
             src={HERO_IMAGE}
             alt="Applying facial serum as part of a skincare routine"
-            className="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
+            style={{ y: heroImageY }}
+            className="absolute inset-0 h-[130%] w-full object-cover object-[50%_20%]"
           />
           <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
             Photo: Anna Nekrashevich / Pexels
