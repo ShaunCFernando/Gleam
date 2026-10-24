@@ -13,6 +13,7 @@ router = APIRouter(prefix="/api/routines", tags=["routines"])
 def _to_routine_out(slug: str, answers: schemas.QuizAnswers, db: Session) -> schemas.RoutineOut:
     steps = build_routine(db, answers)
     total = sum((s["pick"]["product"].price or 0) for s in steps if s["pick"])
+    total = round(total, 2)
     return schemas.RoutineOut(slug=slug, total_price=total, answers=answers, steps=steps)
 
 
