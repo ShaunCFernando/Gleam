@@ -16,6 +16,7 @@ Polite by design: identifies itself with a real User-Agent and paces requests,
 per Open Beauty Facts' API usage guidelines.
 """
 
+import re
 import time
 
 import requests
@@ -60,10 +61,43 @@ CATEGORY_KEYWORDS = [
 ]
 
 
+# Keywords in CATEGORY_KEYWORDS that are intentionally matched as word
+# prefixes rather than whole words: "moisturiz" is meant to also catch
+# "moisturizer"/"moisturizing", and "moistur" additionally catches
+# "moisture" and the British "moisturiser" spelling. These must stay
+# substring matches rather than get whole-word boundaries.
+_PREFIX_KEYWORDS = {"moisturiz", "moistur"}
+
+
+def _keyword_matches(keyword: str, padded_name: str) -> bool:
+    """Multi-word phrases (e.g. "sheet mask") already have natural word
+    boundaries on both sides when checked as a substring of the
+    space-padded name. A single word (e.g. "mask") doesn't — "masking" or
+    "unmasked" would match as a bare substring — so it's matched as a
+    whole word instead, unless it's a deliberate prefix fragment (see
+    _PREFIX_KEYWORDS).
+
+    The boundary only excludes adjacent letters, not digits/symbols: real
+    product names routinely glue a number onto a single-word keyword (e.g.
+    "SPF50+", "SPF45") and that's still the same whole word, not a match
+    inside some unrelated longer word — plain regex \\b would treat the
+    digit as a word character and wrongly reject those. An optional
+    trailing "s"/"es" is allowed before the boundary check so ordinary
+    plurals ("masks", "toners", "patches") still match the singular
+    keyword, without reopening the door to a genuinely different word
+    like "masking".
+    """
+    word = keyword.strip()
+    if " " in word or word in _PREFIX_KEYWORDS:
+        return keyword in padded_name
+    pattern = rf"(?<![a-z]){re.escape(word)}(e?s)?(?![a-z])"
+    return re.search(pattern, padded_name) is not None
+
+
 def classify_category(product_name: str) -> str | None:
     name = f" {product_name.lower()} "
     for category, keywords in CATEGORY_KEYWORDS:
-        if any(kw in name for kw in keywords):
+        if any(_keyword_matches(kw, name) for kw in keywords):
             return category
     return None
 
