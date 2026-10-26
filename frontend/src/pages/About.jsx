@@ -80,7 +80,7 @@ function IngredientSpotlight() {
           >
             {p?.id ? (
               <Card className="overflow-hidden">
-                <img src={p.image_url} alt="" className="h-40 w-full bg-muted object-contain p-4" />
+                <img src={p.image_url} alt={`${p.brand} ${p.name}`} className="h-40 w-full bg-muted object-contain p-4" />
                 <CardContent className="p-4">
                   <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
                     {SPOTLIGHTS[i]?.label}

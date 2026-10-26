@@ -124,7 +124,7 @@ export default function Results() {
                       {pick.product.image_url && (
                         <img
                           src={pick.product.image_url}
-                          alt=""
+                          alt={`${pick.product.brand} ${pick.product.name}`}
                           loading="lazy"
                           className="mb-4 h-40 w-full rounded-xl bg-muted object-contain p-3"
                         />

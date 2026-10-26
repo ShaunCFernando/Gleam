@@ -44,7 +44,7 @@ function ProductImage({ product }) {
     return (
       <img
         src={product.image_url}
-        alt=""
+        alt={`${product.brand} ${product.name}`}
         loading="lazy"
         className="h-40 w-full rounded-t-2xl bg-muted object-contain p-4"
       />

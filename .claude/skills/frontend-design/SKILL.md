@@ -120,8 +120,11 @@ rather than introducing a different easing/timing language:
   (`type: "spring", stiffness: 400-500, damping: 25-40`) for
   hover/tap feedback and layout transitions (`layoutId` underlines,
   `AnimatePresence` exits).
-- Respect `prefers-reduced-motion` (already handled globally in
-  `styles.css`) — don't add animations that bypass it.
+- Respect `prefers-reduced-motion` — native CSS transitions are
+  handled globally in `styles.css`, and Framer Motion-driven animation
+  (which doesn't see that media query) is handled globally via
+  `<MotionConfig reducedMotion="user">` in `main.jsx`. Don't add
+  animations that bypass either.
 
 ## Avoid generic AI aesthetic
 

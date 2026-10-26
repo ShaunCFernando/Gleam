@@ -32,7 +32,7 @@ function loadSavedIds() {
 
 function ProductThumb({ product, className }) {
   if (product.image_url) {
-    return <img src={product.image_url} alt="" className={className} />;
+    return <img src={product.image_url} alt={`${product.brand} ${product.name}`} className={className} />;
   }
   return (
     <div className={`flex items-center justify-center bg-muted font-serif-display text-primary/40 ${className}`}>

@@ -128,7 +128,7 @@ function FeaturedProducts() {
           >
             {p ? (
               <Card className="overflow-hidden">
-                <img src={p.image_url} alt="" className="h-32 w-full bg-muted object-contain p-3" />
+                <img src={p.image_url} alt={`${p.brand} ${p.name}`} className="h-32 w-full bg-muted object-contain p-3" />
                 <CardContent className="p-3">
                   <div className="truncate text-xs uppercase tracking-wide text-muted-foreground">
                     {p.brand}
