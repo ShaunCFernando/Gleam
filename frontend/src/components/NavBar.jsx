@@ -48,7 +48,11 @@ export default function NavBar() {
     >
       <div className="container flex h-16 max-w-3xl items-center justify-between">
         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-          <NavLink to="/" className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
+          <NavLink
+            to="/"
+            onClick={() => setOpen(false)}
+            className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-primary"
+          >
             Gleam
           </NavLink>
         </motion.div>
