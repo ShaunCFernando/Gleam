@@ -8,6 +8,7 @@ import RoutinePath from "@/components/RoutinePath";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatPrice } from "@/lib/utils";
 
 const PROGRESS_KEY = "gleam:build-routine";
 
@@ -132,7 +133,7 @@ export default function Build() {
   }
 
   const selected = Object.values(picks);
-  const total = selected.reduce((sum, p) => sum + (p.price || 0), 0);
+  const total = Math.round(selected.reduce((sum, p) => sum + (p.price || 0), 0) * 100) / 100;
   const activeStepLabels = STEPS.filter((s) => picks[s.category]?.actives).map((s) => s.label);
   const openStepLabel = STEPS.find((s) => s.category === openCategory)?.label ?? "";
 
@@ -176,7 +177,7 @@ export default function Build() {
             <span className="text-sm text-muted-foreground">
               {selected.length} of {STEPS.length} steps picked
             </span>
-            <span className="text-lg font-semibold text-primary">${total.toFixed(0)}</span>
+            <span className="text-lg font-semibold text-primary">{formatPrice(total)}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -241,7 +242,7 @@ export default function Build() {
                     <div className="flex shrink-0 items-center gap-2">
                       {p.actives && <Badge variant="outline">actives</Badge>}
                       {p.price != null && (
-                        <span className="whitespace-nowrap text-sm font-semibold text-primary">${p.price}</span>
+                        <span className="whitespace-nowrap text-sm font-semibold text-primary">{formatPrice(p.price)}</span>
                       )}
                     </div>
                   </button>

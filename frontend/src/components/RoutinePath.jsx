@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 const STEP_ICONS = {
   cleanser: Droplets,
@@ -98,7 +98,9 @@ function StepRow({ step, index, pick, isActive, side, onChoose, onRemove, rowRef
                     {pick.brand} {pick.name}
                   </div>
                   <div className={cn("mt-1 flex items-center gap-2", alignRight && "justify-end")}>
-                    {pick.price != null && <span className="text-sm font-semibold text-primary">${pick.price}</span>}
+                    {pick.price != null && (
+                      <span className="text-sm font-semibold text-primary">{formatPrice(pick.price)}</span>
+                    )}
                     {pick.actives && <Badge variant="outline">actives</Badge>}
                   </div>
                 </div>

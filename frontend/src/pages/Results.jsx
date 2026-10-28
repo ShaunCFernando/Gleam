@@ -8,6 +8,7 @@ import PageContainer from "@/components/PageContainer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatPrice } from "@/lib/utils";
 
 export default function Results() {
   const { slug } = useParams();
@@ -92,7 +93,7 @@ export default function Results() {
       <h1 className="font-serif-display text-3xl sm:text-4xl">Your routine</h1>
       <p className="mt-2 text-muted-foreground">
         {routine.steps.length} steps, in the order you apply them &middot;{" "}
-        <strong className="text-primary">${routine.total_price}</strong> total
+        <strong className="text-primary">{formatPrice(routine.total_price)}</strong> total
       </p>
 
       <div className="mt-10 flex flex-col">
@@ -138,7 +139,7 @@ export default function Results() {
                         </div>
                         {pick.product.price != null && (
                           <div className="whitespace-nowrap font-semibold text-primary">
-                            ${pick.product.price}
+                            {formatPrice(pick.product.price)}
                           </div>
                         )}
                       </div>
@@ -160,7 +161,7 @@ export default function Results() {
                         <div className="mt-2.5 text-sm text-muted-foreground">
                           Also good: {stepResult.alt.product.brand} {stepResult.alt.product.name}
                           {stepResult.alt.product.price != null &&
-                            ` ($${stepResult.alt.product.price})`}
+                            ` (${formatPrice(stepResult.alt.product.price)})`}
                         </div>
                       )}
                     </CardContent>

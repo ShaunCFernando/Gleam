@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatPrice } from "@/lib/utils";
 
 const CATEGORIES = [
   { value: "all", label: "All categories" },
@@ -258,7 +259,7 @@ export default function Catalog() {
                         <div className="truncate font-serif-display text-lg leading-snug">{p.name}</div>
                       </div>
                       {p.price != null && (
-                        <div className="whitespace-nowrap font-semibold text-primary">${p.price}</div>
+                        <div className="whitespace-nowrap font-semibold text-primary">{formatPrice(p.price)}</div>
                       )}
                     </div>
                     <div className="mt-2 text-sm text-primary/80">{p.ingredient}</div>
