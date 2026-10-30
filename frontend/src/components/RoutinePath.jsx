@@ -134,7 +134,7 @@ function StepRow({ step, index, pick, isActive, side, onChoose, onRemove, rowRef
             type="button"
             onClick={() => onChoose(step.category)}
             className={cn(
-              "flex min-w-0 flex-1 flex-col gap-1 rounded-2xl border border-dashed border-border p-4 text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground",
+              "flex min-w-0 flex-1 flex-col gap-1 rounded-2xl border border-dashed border-border p-4 text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:border-primary/50 hover:text-foreground",
               alignRight ? "items-end text-right" : "items-start text-left"
             )}
           >
@@ -212,7 +212,7 @@ export default function RoutinePath({ steps, picks, onChoose, onRemove }) {
               key={step.category}
               type="button"
               onClick={() => rowRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" })}
-              className="group relative flex items-center justify-center p-1"
+              className="group relative flex items-center justify-center rounded-full p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={`Jump to ${step.label}`}
             >
               <motion.span

@@ -52,7 +52,7 @@ function OptionButton({ selected, label, detail, onClick, disabled }) {
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "flex w-full flex-col items-start gap-0.5 rounded-2xl border border-border bg-card px-5 py-4 text-left transition-colors disabled:opacity-70",
+        "flex w-full flex-col items-start gap-0.5 rounded-2xl border border-border bg-card px-5 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70",
         selected ? "border-primary bg-secondary" : "hover:border-primary/50"
       )}
     >
@@ -198,7 +198,7 @@ export default function Quiz() {
           <button
             onClick={goBack}
             disabled={submitting || advancing}
-            className="flex items-center gap-1 hover:text-foreground disabled:opacity-40"
+            className="flex items-center gap-1 rounded-md hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-40"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>

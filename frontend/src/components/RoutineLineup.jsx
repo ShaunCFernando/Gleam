@@ -101,7 +101,7 @@ export default function RoutineLineup() {
               onFocus={() => setHovered(step.id)}
               onBlur={() => setHovered(null)}
               style={{ zIndex: isHovered ? 30 : 1 }}
-              className="relative shrink-0 focus-visible:outline-none"
+              className="relative shrink-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <motion.div
                 animate={{
