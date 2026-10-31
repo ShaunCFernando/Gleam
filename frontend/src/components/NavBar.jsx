@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import PageContainer from "@/components/PageContainer";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -46,7 +47,7 @@ export default function NavBar() {
       transition={{ duration: 0.4 }}
       className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur"
     >
-      <div className="container flex h-16 max-w-3xl items-center justify-between">
+      <PageContainer className="flex h-16 items-center justify-between">
         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
           <NavLink
             to="/"
@@ -83,7 +84,7 @@ export default function NavBar() {
             </motion.span>
           </AnimatePresence>
         </motion.button>
-      </div>
+      </PageContainer>
 
       <AnimatePresence initial={false}>
         {open && (
