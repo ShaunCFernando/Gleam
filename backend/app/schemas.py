@@ -42,6 +42,7 @@ class ProductMatchOut(BaseModel):
     product: ProductOut
     score: float
     reasons: list[str]
+    reason: str
 
 
 class RoutineStepOut(BaseModel):

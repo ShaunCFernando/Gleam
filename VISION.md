@@ -15,8 +15,8 @@ Constraints: recommendation logic stays pure/testable; UI as a state machine; no
 dependencies without a note explaining why; follow `frontend-design` for anything visual.
 
 ## Next up
-- [ ] Add a "why we picked this" one-line explanation under each recommended product on the Results page, derived from the quiz answers that scored it. Acceptance: every recommendation shows a reason; scoring logic unchanged; unit test covers the explanation function.
-- [ ] Add a scroll-linked parallax hero on the Home page: a full-bleed image that moves at a different scroll speed than the heading text layered on top of it, using Framer Motion's `useScroll`/`useTransform` (already a dependency, no new one). Acceptance: image and text move at visibly different rates while scrolling; respects `prefers-reduced-motion` (already handled globally in `styles.css`); no new dependency; matches `frontend-design` color/typography tokens.
+- [x] Add a "why we picked this" one-line explanation under each recommended product on the Results page, derived from the quiz answers that scored it. Acceptance: every recommendation shows a reason; scoring logic unchanged; unit test covers the explanation function.
+- [x] Add a scroll-linked parallax hero on the Home page: a full-bleed image that moves at a different scroll speed than the heading text layered on top of it, using Framer Motion's `useScroll`/`useTransform` (already a dependency, no new one). Acceptance: image and text move at visibly different rates while scrolling; respects `prefers-reduced-motion` (already handled globally in `styles.css`); no new dependency; matches `frontend-design` color/typography tokens.
 - [ ] Add a skin-concern filter (acne, dryness, sensitivity) on the Catalog page that re-ranks results. Acceptance: filter is pure, covered by tests, and never returns an empty list (falls back to closest matches).
 
 ## Needs a product decision first
@@ -24,5 +24,5 @@ dependencies without a note explaining why; follow `frontend-design` for anythin
 - Subscription/premium tier: needs a decision on what's free vs. paid before a data model or paywall is built.
 
 ## Done
-```
-```
+- [x] "Why we picked this" one-line explanation on each Results page recommendation (`backend/app/scoring.py::explain_reasons`, surfaced via `ProductMatchOut.reason`). Note: the "unit test covers the explanation function" part of the acceptance criteria is unmet — no test suite/framework exists in this repo yet (see `CLAUDE.md`), so `explain_reasons` has no automated test, only manual verification. It's a pure function, ready to test as soon as a framework is added.
+- [x] Scroll-linked parallax hero on the Home page (`frontend/src/pages/Home.jsx`, `useScroll`/`useTransform` driving `heroImageY`).

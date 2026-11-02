@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { getRoutine } from "@/api";
 import PageContainer from "@/components/PageContainer";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
@@ -147,13 +146,7 @@ export default function Results() {
                       <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
                         {pick.product.blurb}
                       </p>
-                      {pick.reasons.length > 0 && (
-                        <div className="mt-3.5 flex flex-wrap gap-1.5">
-                          {pick.reasons.map((r) => (
-                            <Badge key={r}>{r}</Badge>
-                          ))}
-                        </div>
-                      )}
+                      {pick.reason && <p className="mt-3.5 text-sm text-primary/80">{pick.reason}</p>}
                       <div className="mt-3.5 border-t border-dashed border-border pt-3 text-sm italic text-muted-foreground">
                         {stepResult.tip}
                       </div>

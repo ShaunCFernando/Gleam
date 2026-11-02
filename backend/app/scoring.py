@@ -66,6 +66,19 @@ def score_product(product: models.Product, answers, concern_labels: dict[str, st
     return score, deduped
 
 
+def explain_reasons(reasons: list[str]) -> str:
+    """Turns the matched-attribute reasons list into a single trust-building sentence for the Results page ("why we picked this")."""
+    if not reasons:
+        return "A solid all-around pick for your routine."
+    if len(reasons) == 1:
+        body = reasons[0]
+    elif len(reasons) == 2:
+        body = f"{reasons[0]} and {reasons[1]}"
+    else:
+        body = ", ".join(reasons[:-1]) + f", and {reasons[-1]}"
+    return f"Picked for your {body}."
+
+
 def build_routine(db: Session, answers):
     concern_labels = {c.id: c.label for c in db.query(models.Concern).all()}
     categories = ROUTINES[answers.routine_size]
@@ -98,8 +111,16 @@ def build_routine(db: Session, answers):
                 "category": category,
                 "label": meta["label"],
                 "tip": meta["tip"],
-                "pick": {"product": pick[2], "score": pick[0], "reasons": pick[1]} if pick else None,
-                "alt": {"product": alt[2], "score": alt[0], "reasons": alt[1]} if alt else None,
+                "pick": (
+                    {"product": pick[2], "score": pick[0], "reasons": pick[1], "reason": explain_reasons(pick[1])}
+                    if pick
+                    else None
+                ),
+                "alt": (
+                    {"product": alt[2], "score": alt[0], "reasons": alt[1], "reason": explain_reasons(alt[1])}
+                    if alt
+                    else None
+                ),
             }
         )
     return steps
