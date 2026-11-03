@@ -100,6 +100,14 @@ export default function Quiz() {
         if (!mountedRef.current) return;
         setSteps(data);
         setStepIndex((i) => Math.min(Math.max(i, 0), data.length - 1));
+        const concernsStep = data.find((s) => s.id === "concerns");
+        if (concernsStep) {
+          const validConcernIds = new Set(concernsStep.options.map((opt) => opt.value));
+          setAnswers((prev) => ({
+            ...prev,
+            concerns: prev.concerns.filter((id) => validConcernIds.has(id)),
+          }));
+        }
       })
       .catch((err) => {
         if (!mountedRef.current) return;
