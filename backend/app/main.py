@@ -7,7 +7,9 @@ from .routers import concerns, products, quiz, routines
 
 app = FastAPI(title="Gleam API")
 
-allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+allowed_origins = [
+    o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
