@@ -96,7 +96,7 @@ function FeaturedProducts() {
   }, []);
 
   useEffect(() => {
-    getProducts()
+    getProducts({ source: "curated", limit: 12 })
       .then((all) => {
         if (!mountedRef.current) return;
         setProducts(all.filter((p) => p.image_url).slice(0, 4));
