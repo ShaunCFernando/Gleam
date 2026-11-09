@@ -67,9 +67,11 @@ export default function NavBar() {
 
         <motion.button
           whileTap={{ scale: 0.9 }}
-          className="sm:hidden"
+          className="rounded-full sm:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
@@ -90,6 +92,7 @@ export default function NavBar() {
         {open && (
           <motion.nav
             key="mobile-menu"
+            id="mobile-nav"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
