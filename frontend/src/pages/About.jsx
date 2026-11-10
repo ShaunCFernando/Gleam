@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { BadgeCheck, FlaskConical, Layers, Leaf, ShieldHalf } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -104,6 +104,7 @@ export default function About() {
   const navigate = useNavigate();
 
   const heroRef = useRef(null);
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroImageY = useTransform(heroProgress, [0, 1], ["-6%", "6%"]);
 
@@ -148,7 +149,7 @@ export default function About() {
           <motion.img
             src={HERO_IMAGE}
             alt="A traditional Korean ginseng shop"
-            style={{ y: heroImageY }}
+            style={{ y: reduceMotion ? "0%" : heroImageY }}
             className="absolute inset-0 h-[130%] w-full object-cover"
           />
           <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">

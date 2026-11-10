@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Droplets, Flower2, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -54,13 +54,14 @@ const PILLARS_CENTER = (PILLARS.length - 1) / 2;
 // mode="enter": starts scattered, converges as the section scrolls into
 // view — the usual case for anything below the fold.
 function ConvergeWord({ word, index, centerIndex, scrollYProgress, mode = "enter", italic }) {
+  const reduceMotion = useReducedMotion();
   const distance = index - centerIndex;
   const input = mode === "enter" ? [0, 0.5] : [0, 1];
   const range = mode === "enter" ? [distance * 40, 0] : [0, distance * 30];
   const x = useTransform(scrollYProgress, input, range);
   return (
     <motion.span
-      style={{ x }}
+      style={{ x: reduceMotion ? 0 : x }}
       className={cn("mr-[0.28em] inline-block last:mr-0", italic && "not-italic text-primary sm:italic")}
     >
       {word}
@@ -69,11 +70,12 @@ function ConvergeWord({ word, index, centerIndex, scrollYProgress, mode = "enter
 }
 
 function PillarCard({ pillar, index, scrollYProgress }) {
+  const reduceMotion = useReducedMotion();
   const distance = index - PILLARS_CENTER;
   const x = useTransform(scrollYProgress, [0, 0.5], [distance * 60, 0]);
   const opacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
   return (
-    <motion.div style={{ x, opacity }}>
+    <motion.div style={{ x: reduceMotion ? 0 : x, opacity: reduceMotion ? 1 : opacity }}>
       <Card className="h-full">
         <CardContent className="flex h-full flex-col gap-3 p-6">
           <pillar.icon className="h-6 w-6 text-primary" strokeWidth={1.6} />
@@ -148,6 +150,7 @@ function FeaturedProducts() {
 
 export default function Home() {
   const navigate = useNavigate();
+  const reduceMotion = useReducedMotion();
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -250,7 +253,7 @@ export default function Home() {
           <motion.img
             src={HERO_IMAGE}
             alt="Applying facial serum as part of a skincare routine"
-            style={{ y: heroImageY }}
+            style={{ y: reduceMotion ? "0%" : heroImageY }}
             className="absolute inset-0 h-[130%] w-full object-cover object-[50%_20%]"
           />
           <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">
@@ -302,7 +305,7 @@ export default function Home() {
           <motion.img
             src={HYDRATION_IMAGE}
             alt="Hands applying lotion as part of a hydration routine"
-            style={{ y: hydrationImageY }}
+            style={{ y: reduceMotion ? "0%" : hydrationImageY }}
             className="absolute inset-0 h-[130%] w-full object-cover"
           />
           <span className="absolute bottom-3 right-3 rounded-full bg-foreground/35 px-2.5 py-1 text-[10px] text-background backdrop-blur-sm">

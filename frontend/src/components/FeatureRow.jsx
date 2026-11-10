@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ export default function FeatureRow({
   action,
 }) {
   const ref = useRef(null);
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
 
@@ -29,7 +30,7 @@ export default function FeatureRow({
         <motion.img
           src={image}
           alt={imageAlt}
-          style={{ y }}
+          style={{ y: reduceMotion ? "0%" : y }}
           className="absolute inset-0 h-[130%] w-full object-cover"
         />
         {imageCredit && (
