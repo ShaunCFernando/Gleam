@@ -20,7 +20,7 @@ function DesktopLink({ link, isActive }) {
       to={link.to}
       end={link.end}
       className={cn(
-        "relative py-1 text-sm text-muted-foreground transition-colors hover:text-foreground",
+        "relative rounded-md py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         isActive && "font-semibold text-foreground"
       )}
     >
@@ -52,7 +52,7 @@ export default function NavBar() {
           <NavLink
             to="/"
             onClick={() => setOpen(false)}
-            className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-primary"
+            className="rounded-md font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Gleam
           </NavLink>
@@ -67,7 +67,7 @@ export default function NavBar() {
 
         <motion.button
           whileTap={{ scale: 0.9 }}
-          className="sm:hidden"
+          className="rounded-full p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
         >
@@ -109,7 +109,7 @@ export default function NavBar() {
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      "block rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground",
+                      "block rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                       isActive && "bg-secondary font-semibold text-foreground"
                     )
                   }
