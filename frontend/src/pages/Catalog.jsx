@@ -230,7 +230,7 @@ export default function Catalog() {
         </label>
       </div>
 
-      {error && <p className="mt-8 text-sm text-destructive">Couldn't load products ({error}).</p>}
+      {error && <p role="alert" className="mt-8 text-sm text-destructive">Couldn't load products ({error}).</p>}
 
       {products && products.length === 0 && (
         <p className="mt-16 text-center text-muted-foreground">No products match those filters.</p>

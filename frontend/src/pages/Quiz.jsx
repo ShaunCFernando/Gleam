@@ -249,7 +249,7 @@ export default function Quiz() {
       </AnimatePresence>
 
       {submitError && (
-        <p className="mt-4 text-sm text-destructive">Couldn't save your routine ({submitError}).</p>
+        <p role="alert" className="mt-4 text-sm text-destructive">Couldn't save your routine ({submitError}).</p>
       )}
 
       {step.type === "multi" && (

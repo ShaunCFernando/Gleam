@@ -195,7 +195,7 @@ export default function Results() {
           Start over
         </Button>
       </div>
-      {copyError && <p className="mt-4 text-sm text-destructive">{copyError}</p>}
+      {copyError && <p role="alert" className="mt-4 text-sm text-destructive">{copyError}</p>}
     </PageContainer>
   );
 }

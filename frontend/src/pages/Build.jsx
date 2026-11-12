@@ -153,7 +153,7 @@ export default function Build() {
             transition={{ duration: 0.25 }}
             className="mt-6 overflow-hidden rounded-2xl border border-destructive/30 bg-destructive/5"
           >
-            <p className="p-4 text-sm leading-relaxed text-destructive">
+            <p role="alert" className="p-4 text-sm leading-relaxed text-destructive">
               <strong>{activeStepLabels.join(" + ")}</strong> both carry active ingredients. Most
               people introduce actives one at a time, not stacked together — consider spacing them
               across different days instead of using both daily.
