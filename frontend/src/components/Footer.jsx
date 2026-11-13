@@ -21,11 +21,11 @@ export default function Footer() {
               href="https://world.openbeautyfacts.org"
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-border underline-offset-2 hover:text-foreground"
+              className="rounded-sm underline decoration-border underline-offset-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Open Beauty Facts
             </a>{" "}
-            (CC BY-SA) &middot; <Link to="/about" className="hover:text-foreground">about our picks</Link>
+            (CC BY-SA) &middot; <Link to="/about" className="rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">about our picks</Link>
           </p>
         </motion.div>
       </PageContainer>
