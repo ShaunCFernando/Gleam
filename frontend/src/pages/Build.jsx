@@ -49,6 +49,7 @@ export default function Build() {
   const [options, setOptions] = useState(null);
   const [search, setSearch] = useState("");
   const mountedRef = useRef(true);
+  const dialogRef = useRef(null);
 
   useEffect(() => {
     return () => {
@@ -113,6 +114,23 @@ export default function Build() {
     if (!openCategory) return;
     function handleKeyDown(e) {
       if (e.key === "Escape") setOpenCategory(null);
+      // Trap Tab within the dialog so focus can't escape to the page behind it.
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const focusableArray = Array.from(focusable).filter((el) => !el.disabled);
+        if (focusableArray.length === 0) return;
+        const first = focusableArray[0];
+        const last = focusableArray[focusableArray.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -198,6 +216,7 @@ export default function Build() {
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-md"
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label={`Choose a ${openStepLabel.toLowerCase()}`}
