@@ -96,10 +96,10 @@ function FeaturedProducts() {
   }, []);
 
   useEffect(() => {
-    getProducts()
+    getProducts({ source: "curated", has_image: true, limit: 8 })
       .then((all) => {
         if (!mountedRef.current) return;
-        setProducts(all.filter((p) => p.image_url).slice(0, 4));
+        setProducts(all.slice(0, 4));
       })
       .catch(() => {
         if (!mountedRef.current) return;

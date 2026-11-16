@@ -18,6 +18,7 @@ def list_products(
     concern: Optional[str] = None,
     max_price: Optional[float] = None,
     source: Optional[str] = None,
+    has_image: Optional[bool] = None,
     sort: str = "name",
     limit: Optional[int] = Query(default=None, gt=0, le=100),
     offset: int = Query(default=0, ge=0),
@@ -49,6 +50,8 @@ def list_products(
         query = query.filter(models.Product.concerns.any(concern))
     if max_price is not None:
         query = query.filter(models.Product.price <= max_price)
+    if has_image:
+        query = query.filter(models.Product.image_url.isnot(None))
 
     if sort == "price_asc":
         query = query.order_by(models.Product.price.asc().nulls_last())
