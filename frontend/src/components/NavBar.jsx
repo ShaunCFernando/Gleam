@@ -66,6 +66,7 @@ export default function NavBar() {
         </nav>
 
         <motion.button
+          type="button"
           whileTap={{ scale: 0.9 }}
           className="rounded-md sm:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           onClick={() => setOpen((v) => !v)}

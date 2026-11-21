@@ -40,6 +40,7 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, ..
       whileTap={{ scale: 0.965 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       ref={ref}
+      type="button"
       {...props}
     />
   );

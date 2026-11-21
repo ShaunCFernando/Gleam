@@ -48,6 +48,7 @@ function loadSavedProgress() {
 function OptionButton({ selected, label, detail, onClick, disabled }) {
   return (
     <motion.button
+      type="button"
       whileTap={{ scale: 0.98 }}
       disabled={disabled}
       onClick={onClick}
@@ -204,6 +205,7 @@ export default function Quiz() {
         </span>
         {stepIndex > 0 && (
           <button
+            type="button"
             onClick={goBack}
             disabled={submitting || advancing}
             className="flex items-center gap-1 rounded-md hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-40"
