@@ -51,6 +51,7 @@ function OptionButton({ selected, label, detail, onClick, disabled }) {
       whileTap={{ scale: 0.98 }}
       disabled={disabled}
       onClick={onClick}
+      aria-pressed={selected}
       className={cn(
         "flex w-full flex-col items-start gap-0.5 rounded-2xl border border-border bg-card px-5 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70",
         selected ? "border-primary bg-secondary" : "hover:border-primary/50"

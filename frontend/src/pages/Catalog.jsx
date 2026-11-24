@@ -167,6 +167,7 @@ export default function Catalog() {
             className="pl-10"
             type="search"
             placeholder="Search brand or product…"
+            aria-label="Search brand or product"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
